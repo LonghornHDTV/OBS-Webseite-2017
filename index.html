@@ -11,6 +11,13 @@
     <!-- Loading Jquery plgin leanModal under MIT License http://leanmodal.finelysliced.com.au/ -->
   </head>
   <body>
+    <div id="w">
+      <h1>Welcome to the Demo Test Login Site</h1>
+      <p>Click the login link below to expand the login window. This is only a demo.</p>
+      <center>
+        <a href="#loginmodal" class="flatbtn" id="modaltrigger">Login</a>
+      </center>
+    </div>
     <div id="loginmodal" style="display: none;">
       <h1>Benutzer Login</h1>
       <form id="loginform" name="loginfrom" method="post" action="#">
@@ -18,12 +25,21 @@
         <input type="text" name="username" id="username" class="txtfield" tabindex="1">
 
         <label for="password">Passwort:</label>
-        <input type="text" name="password" id="password" class="txtfield" tabindex="2">
+        <input type="password" name="password" id="password" class="txtfield" tabindex="2">
 
         <div class="center">
-          <input type="submit" name="loginbtn" class="flatbtn-blu hodemodel" value="Log In" tabindex="3">
+          <input type="submit" name="loginbtn" class="flatbtn-blu hidemodal" value="Log In" tabindex="3">
         </div>
       </form>
     </div>
+    <script type="text/javascript">
+      $(function(){
+        $('#loginform').submit(function(e){
+          return false;
+        });
+
+        $('#modaltrigger').leanModal({top: 110, overlay: 0.45, closeButton: ".hidemodal"});
+      });
+    </script>
   </body>
 </html>
