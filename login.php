@@ -78,25 +78,43 @@ if(!$conn->connect_errno) {
 
 
 
-      $sql = "SELECT * FROM logins WHERE Username = ? LIMIT 1";
+      $sql = "SELECT * FROM logins WHERE `Username` = ? AND `Password` = ? LIMIT 1";
+      //$sql = "INSERT INTO  logins (`Username`, `Password`) VALUES (?,?)"; TEST!!!
       if(!$statement = $conn->prepare($sql)) {
         print_r($conn);
         die("Query Error with INSERT: " . $conn->prepare($sql) . " : " . $sql . " : ");
       }
-      $statement->bind_param('s', $username);
-
       $username = $_POST['username'];
       $password = $_POST['password'];
+
+      //UNBIND SQL Injection and it works :)))
+      $username = stripslashes($username);
+      $password = stripslashes($password);
+      //echo "user: " . $username . " pass: " . $password;
+      $username = mysqli_real_escape_string($conn, $username);
+      $password = mysqli_real_escape_string($conn, $password);
+      //echo "user1: " . $username . " pass1: " . $password;
+
+      $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+      $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+      $encrypedpassword = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $SALT, $password, MCRYPT_MODE_ECB, $iv);
+
+      $encrypedpasswordwithbase64 = base64_encode($encrypedpassword);
+
+      //print_r($encrypedpasswordwithbase64);
+
+      $statement->bind_param('ss', $username, $encrypedpasswordwithbase64);
+
 
       if(!$statement->execute()) {
         die("Query fehlgeschlagen: " .$statement->error);
       }
       $statement->store_result();
 
-      $statement->bind_result($usernamedb, $db_password);
+      //$statement->bind_result($usernamedb, $db_password);
       $statement->fetch();
       if($statement->num_rows == 1) {
-        echo "Erfogreich eingeloggt. Du wird automatisch weiter geleitet. Wenn das nicht funktioniert klicke <a href=\"dashboard.html\">hier</a>";
+        echo "Erfogreich eingeloggt. Du wird automatisch weiter geleitet. Wenn das nicht funktioniert klicke <a href=\"index.php\">hier</a>";
       //  echo "<meta http-equiv=\"refresh\" content=\"10\" URL=\"/dashboard.html\">"; Dosen't Work :(
         die("");
       } else{

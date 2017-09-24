@@ -9,4 +9,11 @@ $MYSQL_DATENBANK = 'schoolpage'; //Hier bitte den Datenbank Namen eingeben.
 
 $PAGE_ADMIN_BENUTZER = 'root'; //Bitte unbediengt ändern da man mit diesem User volle Rechte auf die Webseite hat.
 $PAGE_ADMIN_PASSWORT = 'admin'; //Bitte das Passwort ändern.
+
+//================================================================
+//Configuration für die Passwort Verschlüsslung und Entschlüsslung
+//================================================================
+
+$SALT = 'passwortpasswort'; //Bitte ändern. !!!Wenn geändert wird funktionieren alle Pasworter die gespeichert worden nicht mehr!!!
+//ACHTUNG Der "SALT" darf nur 16, 24 oder 32 Zeichen lang sein.
 ?>
